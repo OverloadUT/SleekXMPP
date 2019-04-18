@@ -1,5 +1,11 @@
-SleekXMPP
-#########
+SleekXMPP for Sucks
+###################
+
+**This fork of SleekXMPP has TLS certificate validation DISABLED, specifically
+to be used by wpietri/sucks**. This is a temporary hack solution for the issues
+with Ecovacs certificates.
+
+
 
 SleekXMPP is an MIT licensed XMPP library for Python 2.6/3.1+,
 and is featured in examples in
