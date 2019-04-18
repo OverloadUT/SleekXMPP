@@ -97,6 +97,11 @@ def extract_names(raw_cert):
 
 
 def extract_dates(raw_cert):
+    # !!!! HACK HACK HACK HACK HACK !!!!
+    # For this sucks-only version of SleekXMPP, we avoid validating the certs due to Ecovacs' servers having invalid certs
+    return None, None
+
+    
     if not HAVE_PYASN1:
         log.warning("Could not find pyasn1 and pyasn1_modules. " + \
                     "SSL certificate expiration COULD NOT BE VERIFIED.")
@@ -125,6 +130,12 @@ def get_ttl(raw_cert):
 
 
 def verify(expected, raw_cert):
+    # !!!! HACK HACK HACK HACK HACK !!!!
+    # For this sucks-only version of SleekXMPP, we avoid validating the certs due to Ecovacs' servers having invalid certs
+    return
+
+
+    
     if not HAVE_PYASN1:
         log.warning("Could not find pyasn1 and pyasn1_modules. " + \
                     "SSL certificate COULD NOT BE VERIFIED.")
