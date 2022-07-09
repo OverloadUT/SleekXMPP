@@ -122,32 +122,6 @@ def extract_dates(raw_cert):
     # For this sucks-only version of SleekXMPP, we avoid validating the certs due to Ecovacs' servers having invalid certs
     return None, None
 
-    
-    if not HAVE_PYASN1:
-        log.warning("Could not find pyasn1 and pyasn1_modules. " + \
-                    "SSL certificate expiration COULD NOT BE VERIFIED.")
-        return None, None
-
-    cert = decoder.decode(raw_cert, asn1Spec=Certificate())[0]
-    tbs = cert.getComponentByName('tbsCertificate')
-    validity = tbs.getComponentByName('validity')
-
-    not_before = validity.getComponentByName('notBefore')
-    not_before = str(not_before.getComponent())
-
-    not_after = validity.getComponentByName('notAfter')
-    not_after = str(not_after.getComponent())
-
-    if HAVE_PYASN1_4:
-        not_before = datetime.strptime(not_before, '%y%m%d%H%M%SZ')
-        not_after = datetime.strptime(not_after, '%y%m%d%H%M%SZ')
-    else:
-        not_before = datetime.strptime(not_before, '%Y%m%d%H%M%SZ')
-        not_after = datetime.strptime(not_after, '%Y%m%d%H%M%SZ')
-
-    return not_before, not_after
-
-
 def get_ttl(raw_cert):
     not_before, not_after = extract_dates(raw_cert)
     if not_after is None:
@@ -159,55 +133,3 @@ def verify(expected, raw_cert):
     # !!!! HACK HACK HACK HACK HACK !!!!
     # For this sucks-only version of SleekXMPP, we avoid validating the certs due to Ecovacs' servers having invalid certs
     return
-
-
-    
-    if not HAVE_PYASN1:
-        log.warning("Could not find pyasn1 and pyasn1_modules. " + \
-                    "SSL certificate COULD NOT BE VERIFIED.")
-        return
-
-    not_before, not_after = extract_dates(raw_cert)
-    cert_names = extract_names(raw_cert)
-
-    now = datetime.utcnow()
-
-    if not_before > now:
-        raise CertificateError(
-                'Certificate has not entered its valid date range.')
-
-    if not_after <= now:
-        raise CertificateError(
-                'Certificate has expired.')
-
-    if '.' in expected:
-        expected_wild = expected[expected.index('.'):]
-    else:
-        expected_wild = expected
-    expected_srv = '_xmpp-client.%s' % expected
-
-    for name in cert_names['XMPPAddr']:
-        if name == expected:
-            return True
-    for name in cert_names['SRV']:
-        if name == expected_srv or name == expected:
-            return True
-    for name in cert_names['DNS']:
-        if name == expected:
-            return True
-        if name.startswith('*'):
-            if '.' in name:
-                name_wild = name[name.index('.'):]
-            else:
-                name_wild = name
-            if expected_wild == name_wild:
-                return True
-    for name in cert_names['URI']:
-        if name == expected:
-            return True
-    for name in cert_names['CN']:
-        if name == expected:
-            return True
-
-    raise CertificateError(
-            'Could not match certificate against hostname: %s' % expected)
