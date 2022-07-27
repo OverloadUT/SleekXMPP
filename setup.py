@@ -142,7 +142,7 @@ packages     = [ 'sleekxmppfs',
                  ]
 
 setup(
-    name             = "sleekxmppffs",
+    name             = "sleekxmppfs",
     version          = VERSION,
     description      = DESCRIPTION,
     long_description = LONG_DESCRIPTION,
