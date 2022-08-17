@@ -19,6 +19,7 @@ import stringprep
 import threading
 import encodings.idna
 
+from collections import OrderedDict
 from copy import deepcopy
 
 from sleekxmppfs.util import stringprep_profiles

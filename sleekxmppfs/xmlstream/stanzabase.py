@@ -17,7 +17,8 @@ from __future__ import with_statement, unicode_literals
 import copy
 import logging
 import weakref
-from xml.etree import cElementTree as ET
+from collections import OrderedDict
+from xml.etree import ElementTree as ET
 
 from sleekxmppfs.util import safedict
 from sleekxmppfs.xmlstream import JID
@@ -207,7 +208,7 @@ class ElementBase(object):
 
     """
     The core of SleekXMPP's stanza XML manipulation and handling is provided
-    by ElementBase. ElementBase wraps XML cElementTree objects and enables
+    by ElementBase. ElementBase wraps XML ElementTree objects and enables
     access to the XML contents through dictionary syntax, similar in style
     to the Ruby XMPP library Blather's stanza implementation.
 
@@ -405,7 +406,7 @@ class ElementBase(object):
         self._index = 0
 
         #: The underlying XML object for the stanza. It is a standard
-        #: :class:`xml.etree.cElementTree` object.
+        #: :class:`xml.etree.ElementTree` object.
         self.xml = xml
 
         #: An ordered dictionary of plugin stanzas, mapped by their
@@ -1158,11 +1159,6 @@ class ElementBase(object):
 
         Exposes ElementTree interface for backwards compatibility.
 
-        .. note::
-
-            Matching on attribute values is not supported in Python 2.6
-            or Python 3.1
-
         :param string xpath: An XPath expression matching a single
                              desired element.
         """
@@ -1172,11 +1168,6 @@ class ElementBase(object):
         """Find multiple XML objects in this stanza given an XPath expression.
 
         Exposes ElementTree interface for backwards compatibility.
-
-        .. note::
-
-            Matching on attribute values is not supported in Python 2.6
-            or Python 3.1.
 
         :param string xpath: An XPath expression matching multiple
                              desired elements.

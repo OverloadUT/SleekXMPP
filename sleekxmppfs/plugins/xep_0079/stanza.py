@@ -8,6 +8,7 @@
 
 from __future__ import unicode_literals
 
+from sleekxmppfs.jid import JID
 from sleekxmppfs.xmlstream import ElementBase, register_stanza_plugin
 
 
